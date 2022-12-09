@@ -1,0 +1,70 @@
+<!doctype html>
+
+
+
+<body>
+<!-- partial:index.partial.html -->
+<div class="main-form first">
+  <div class="main-form__title">
+    <h1>Sign-up</h1>
+  </div>
+  <div class="main-form__body">
+    <input id="PRODUCTNAME" class="main-form__input" type="text" placeholder="PRODUCTNAME" />
+    <input id="PRODUCTPRICE" class="main-form__input" type="text" placeholder="PRODUCTPRICE" />
+    <input id="PRODUCTPRICESALE" class="main-form__input" type="text" placeholder="PRODUCTPRICESALE" />
+    <input id="PRODUCTIMG" class="main-form__input" type="text" placeholder="PRODUCTIMG" />
+    <input id="PRODUCTTYPE" class="main-form__input" type="text" placeholder="PRODUCTTYPE" />
+    <input id="PRODUCTNUM" class="main-form__input" type="text" placeholder="PRODUCTNUM" />
+    <input id="PRODUCTCONTENT" class="main-form__input" type="text" placeholder="PRODUCTCONTENT" />
+    <input id="PRODUCTSPENMATERIAL" class="main-form__input" type="text" placeholder="PRODUCTSPENMATERIAL" />
+    <input id="PRODUCTSPENSIZE" class="main-form__input" type="text" placeholder="PRODUCTSPENSIZE" />
+    <input id="PRODUCTSPENMF" class="main-form__input" type="text" placeholder="PRODUCTSPENMF" />
+    <input id="PRODUCTREMARK" class="main-form__input" type="text" placeholder="PRODUCTREMARK" />
+    
+    
+    <button class="btn">Clear</button>
+    <button id="enter" class="btn">Register</button>
+  </div>
+</div>
+<!-- partial -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.0/js/bootstrap.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
+
+</body>
+
+
+
+<script>
+var apiurl={
+    registerdata:"/MySpringBoot/addProduct",
+}
+$("#enter").click(function (){
+    var PRODUCTNAME = $("#PRODUCTNAME").val();
+    var PRODUCTPRICE = $("#PRODUCTPRICE").val();
+    var PRODUCTPRICESALE = $("#PRODUCTPRICESALE").val();
+    var PRODUCTIMG = $("#PRODUCTIMG").val();
+    var PRODUCTTYPE = $("#PRODUCTTYPE").val();
+    var PRODUCTNUM = $("#PRODUCTNUM").val();
+    var PRODUCTCONTENT = $("#PRODUCTCONTENT").val();
+    var PRODUCTSPENMATERIAL = $("#PRODUCTSPENMATERIAL").val();
+    var PRODUCTSPENSIZE = $("#PRODUCTSPENSIZE").val();
+    var PRODUCTSPENMF = $("#PRODUCTSPENMF").val();
+    var PRODUCTREMARK = $("#PRODUCTREMARK").val();
+
+	console.log("PRODUCTNAME= "+PRODUCTNAME);
+
+    $.post({
+        url:apiurl.registerdata,
+        dataType: 'json',
+        contentType:"application/json;charset=UTF-8",
+        data:JSON.stringify({"productName":PRODUCTNAME,"productPrice":PRODUCTPRICE,"productPriceSale":PRODUCTPRICESALE,
+        	"productImg":PRODUCTIMG,"productType":PRODUCTTYPE,"productNum":PRODUCTNUM,"productContent":PRODUCTCONTENT,
+        	"productSpenMaterial":PRODUCTSPENMATERIAL,"productSpenSize":PRODUCTSPENSIZE,"productSpenMF":PRODUCTSPENMF,"productRemark":PRODUCTREMARK}),
+        success:function(res) {
+          	alert("新增成功");
+        }
+    });
+});
+
+</script>
