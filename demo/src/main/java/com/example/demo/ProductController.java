@@ -25,6 +25,7 @@ public class ProductController {
 	@Autowired
 	DataSource dataSource;
 	
+	//撈取所有商品資料回傳給前端
 	@RequestMapping("/productPage")
 	public List<ProductModel> productPage() {
 		
@@ -32,13 +33,14 @@ public class ProductController {
 		
 		list = productRepository.findAll();
 		for(int i = 0 ; i < list.size(); i++) {
+			System.out.println("id= "+list.get(i).getProductId());
 			System.out.println("name= "+list.get(i).getProductName());
 		}
 		
 		return list;
 	}
 	
-	
+	//新增商品
 	 @PostMapping("/addProduct") //設置url路徑對應到此方法上，並限制只能使用Post方法,
 	 public int create(@RequestBody ProductModel product){ //使用@RequestBody取得前端requestBody資訊
 		 
