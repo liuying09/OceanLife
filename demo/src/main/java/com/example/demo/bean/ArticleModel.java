@@ -1,6 +1,8 @@
 package com.example.demo.bean;
 
 
+import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,6 +36,29 @@ public class ArticleModel {
 	
 	@Column(name="articleStatus")
 	 private String articleStatus;
+
+	
+	@Column(name="create_date")
+	 private String createDate;
+	
+	@Column(name="update_date")
+	 private String updateDate;
+	
+	public String getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
+
+	public String getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(String updateDate) {
+		this.updateDate = updateDate;
+	}
 
 	public int getArticleID() {
 		return articleID;
