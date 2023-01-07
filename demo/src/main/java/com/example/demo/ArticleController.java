@@ -99,6 +99,7 @@ public class ArticleController {
 			,@RequestParam(name="file-to-upload",required = false) MultipartFile fileField) throws IOException {
 		
 		
+		ArticleModel a = articleRepository.findByArticleID(articleID);
 		
 //		System.out.println("articleModel.getValueEN()= "+articleModel.getArticleTitle());
 		
@@ -118,7 +119,7 @@ public class ArticleController {
 
 		if(fileField == null) {
 			System.out.println("file == null");
-			image=null;
+			image=a.getArticleImg();
 		}else {
 			System.out.println("file != null");
 			image=fileField.getBytes();
@@ -129,5 +130,9 @@ public class ArticleController {
 		articleRepository.updateArticle(valueEN,image,articleTitle,articleContent,articleRemark,articleStatus, thisDate,articleID);
 	}
 	
+	@RequestMapping("/deleteArticle")
+	public void deleteArticle(@RequestBody ArticleModel articleModel) {
+		articleRepository.deleteArticle(articleModel.getArticleID());
+	}
 	
 }
