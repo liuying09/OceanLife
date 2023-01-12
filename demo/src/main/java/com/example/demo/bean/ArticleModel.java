@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 public class ArticleModel {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO )
 	@Column(name="articleID")
 	 private int articleID;
 	

@@ -14,7 +14,8 @@ import jakarta.persistence.Table;
 public class ProductModel {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY )
 	@Column(name="productId")
 	 private int productId;
 	
@@ -51,14 +52,23 @@ public class ProductModel {
 	@Column(name="productRemark")
 	 private String productRemark;
 	
+	@Column(name="productStatus")
+	 private String productStatus;
+	
 	@Column(name="create_date")
-	 private Date createDate;
+	 private String createDate;
 	
 	@Column(name="update_date")
-	 private Date updateDate;
+	 private String updateDate;
+	
 	 
 	 
-	 
+	public String getProductStatus() {
+		return productStatus;
+	}
+	public void setProductStatus(String productStatus) {
+		this.productStatus = productStatus;
+	}
 	public int getProductId() {
 		return productId;
 	}
@@ -131,16 +141,16 @@ public class ProductModel {
 	public void setProductRemark(String productRemark) {
 		this.productRemark = productRemark;
 	}
-	public Date getCreateDate() {
+	public String getCreateDate() {
 		return createDate;
 	}
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
-	public Date getUpdateDate() {
+	public String getUpdateDate() {
 		return updateDate;
 	}
-	public void setUpdateDate(Date updateDate) {
+	public void setUpdateDate(String updateDate) {
 		this.updateDate = updateDate;
 	}
 	 

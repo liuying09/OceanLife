@@ -83,7 +83,8 @@ public class ArticleController {
 		
 //		articleRepository.addArticle(articleModel.getValueEN(), image, articleModel.getArticleTitle(), 
 //				articleModel.getArticleContent(), articleModel.getArticleRemark(), articleModel.getArticleStatus(), null, null);
-		articleRepository.addArticle(valueEN,image,articleTitle,articleContent,articleRemark,articleStatus,thisDate, null);
+		articleRepository.addArticle(valueEN,image,articleTitle,articleContent.replace("\n","<br>"),articleRemark.replace("\n","<br>"),
+				articleStatus,thisDate, null);
 	}
 	
 	
@@ -127,12 +128,25 @@ public class ArticleController {
 		
 //		articleRepository.updateArticle(articleModel.getValueEN(), image, articleModel.getArticleTitle(), 
 //				articleModel.getArticleContent(), articleModel.getArticleRemark(), articleModel.getArticleStatus(), null, null);
-		articleRepository.updateArticle(valueEN,image,articleTitle,articleContent,articleRemark,articleStatus, thisDate,articleID);
+		articleRepository.updateArticle(valueEN,image,articleTitle,articleContent.replace("\n","<br>"),articleRemark.replace("\n","<br>"),
+				articleStatus, thisDate,articleID);
 	}
 	
 	@RequestMapping("/deleteArticle")
 	public void deleteArticle(@RequestBody ArticleModel articleModel) {
 		articleRepository.deleteArticle(articleModel.getArticleID());
 	}
+	
+	@RequestMapping("/deleteArticleById")
+	public void deleteArticleById(@RequestParam(name="idList",required = false) Integer[] ids ) {
+		
+		for(int i = 0; i < ids.length; i++) {
+			if(articleRepository.findByArticleID(ids[i]) != null) {
+				articleRepository.deleteArticle(ids[i]);
+			}
+		}
+		
+	}
+	
 	
 }
