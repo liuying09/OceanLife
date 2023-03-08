@@ -23,6 +23,17 @@ public class UserModel {
 	@Column(name="userAccount")
 	 private String userAccount;
 	
+	@Column(name="userSalt")
+	private String userSalt;
+	
+	public String getUserSalt() {
+		return userSalt;
+	}
+
+	public void setUserSalt(String userSalt) {
+		this.userSalt = userSalt;
+	}
+
 	@Column(name="userPass")
 	private String userPass;
 	
@@ -38,11 +49,17 @@ public class UserModel {
 	@Column(name="userBirth")
 	private String userBirth;
 	
-	@Column(name="userAderss")
-	private String userAderss;
+	@Column(name="userCountry")
+	private String userCountry;
+	
+	@Column(name="userDistrict")
+	private String userDistrict;
+	
+	@Column(name="userRoad")
+	private String userRoad;
 	
 	@Column(name="userImg")
-	private Blob userImg;
+	private byte[] userImg;
 	
 	@Column(name="userPhone")
 	private String userPhone;
@@ -54,10 +71,10 @@ public class UserModel {
 	private String favoriteID;
 	
 	@Column(name="create_date")
-	 private Date createDate;
+	 private String createDate;
 	
 	@Column(name="update_date")
-	 private Date updateDate;
+	 private String updateDate;
 
 	public int getUserId() {
 		return userId;
@@ -115,19 +132,35 @@ public class UserModel {
 		this.userBirth = userBirth;
 	}
 
-	public String getUserAderss() {
-		return userAderss;
+	public String getUserCountry() {
+		return userCountry;
 	}
 
-	public void setUserAderss(String userAderss) {
-		this.userAderss = userAderss;
+	public void setUserCountry(String userCountry) {
+		this.userCountry = userCountry;
 	}
 
-	public Blob getUserImg() {
+	public String getUserDistrict() {
+		return userDistrict;
+	}
+
+	public void setUserDistrict(String userDistrict) {
+		this.userDistrict = userDistrict;
+	}
+
+	public String getUserRoad() {
+		return userRoad;
+	}
+
+	public void setUserRoad(String userRoad) {
+		this.userRoad = userRoad;
+	}
+
+	public byte[] getUserImg() {
 		return userImg;
 	}
 
-	public void setUserImg(Blob userImg) {
+	public void setUserImg(byte[] userImg) {
 		this.userImg = userImg;
 	}
 
@@ -155,19 +188,19 @@ public class UserModel {
 		this.favoriteID = favoriteID;
 	}
 
-	public Date getCreateDate() {
+	public String getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
 
-	public Date getUpdateDate() {
+	public String getUpdateDate() {
 		return updateDate;
 	}
 
-	public void setUpdateDate(Date updateDate) {
+	public void setUpdateDate(String updateDate) {
 		this.updateDate = updateDate;
 	}
 	

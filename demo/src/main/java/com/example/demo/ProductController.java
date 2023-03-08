@@ -44,7 +44,6 @@ public class ProductController {
 	public Map<String, Map<String,Object>> productPage() {
 		logger.info("==進入傳回全部商品==");
 		List<ProductModel> list = new ArrayList<ProductModel>();
-		List<Object> imgObjects = new ArrayList<Object>();
 		Map<String,Map<String,Object>> map = new HashMap<>();
 		
 		list = productRepository.findAll();
@@ -53,6 +52,7 @@ public class ProductController {
 			System.out.println("id= "+list.get(i).getProductId());
 			System.out.println("name= "+list.get(i).getProductName());
 			
+			mapOne.put("productId",list.get(i).getProductId());
 			mapOne.put("productName",list.get(i).getProductName());
 			mapOne.put("productPrice",list.get(i).getProductPrice());
 			mapOne.put("productPriceSale",list.get(i).getProductPriceSale());
@@ -67,11 +67,14 @@ public class ProductController {
 			mapOne.put("createDate", list.get(i).getCreateDate());
 			mapOne.put("updateDate", list.get(i).getUpdateDate());
 			
-			
+			List<Object> imgObjects = new ArrayList<Object>();
 			List<ProductImgModel> pList = productImgRepository.findByProductID(String.valueOf(list.get(i).getProductId()));
-			for(int j = 0; j < pList.size(); j++) {
-				imgObjects.add(pList.get(j).getProductImgBlob());
+			if(pList.size() != 0) {
+				for(int j = 0; j < pList.size(); j++) {
+					imgObjects.add(pList.get(j).getProductImgBlob());
+				}
 			}
+			
 			
 			mapOne.put("productImg", imgObjects);
 			map.put(String.valueOf(i), mapOne);
@@ -91,6 +94,7 @@ public class ProductController {
 		ProductModel p = productRepository.findByProductId(String.valueOf(productModel.getProductId()));
 		System.out.println("name= "+ p.getProductName());
 		
+		map.put("productId",p.getProductId());
 		map.put("productName",p.getProductName());
 		map.put("productPrice",p.getProductPrice());
 		map.put("productPriceSale",p.getProductPriceSale());
@@ -151,17 +155,17 @@ public class ProductController {
 			productModel.setProductSpenSize(size);
 			productModel.setProductSpenMF(mf);
 			productModel.setProductRemark(remark.replace("\n","<br>"));
-			productModel.setProductSpenSize(status);
+			productModel.setProductStatus(status);
 			productModel.setCreateDate(thisDate);
 			productModel= productRepository.save(productModel);
 
-			
 			
 			if(fileField == null) {
 				System.out.println("file == null");
 				
 			}else {
 				System.out.println("file != null");
+				System.out.println("fileField.length= "+ fileField.length);
 				for(int i = 0; i < fileField.length; i++) {
 					byte[] image;
 					image=fileField[i].getBytes();
@@ -191,7 +195,7 @@ public class ProductController {
 				,@RequestParam(name="status",required = false)String status
 				,@RequestParam(name="file-to-upload",required = false) MultipartFile[] fileField) throws IOException{ 
 		 
-		 	logger.info("==進入新增商品==");
+		 	logger.info("==進入更新商品==");
 		 
 		 	SimpleDateFormat ft =  new SimpleDateFormat ("yyyy-MM-dd");
 			Date date = new Date();
@@ -208,8 +212,8 @@ public class ProductController {
 			productModel.setProductSpenSize(size);
 			productModel.setProductSpenMF(mf);
 			productModel.setProductRemark(remark.replace("\n","<br>"));
-			productModel.setProductSpenSize(status);
-			productModel.setCreateDate(thisDate);
+			productModel.setProductStatus(status);
+			productModel.setUpdateDate(thisDate);
 			productModel= productRepository.save(productModel);
 
 			
