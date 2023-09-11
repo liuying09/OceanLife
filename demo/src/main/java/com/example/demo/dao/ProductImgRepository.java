@@ -18,7 +18,7 @@ public interface ProductImgRepository extends JpaRepository<ProductImgModel,Long
 	//heroku_895d9448560c022.
 		@Transactional
 		@Modifying
-		@Query(value = "INSERT INTO heroku_895d9448560c022.ocean_productimg(PRODUCTID,PRODUCTIMGNAME,PRODUCTIMGBLOB,CREATE_DATE,UPDATE_DATE) "
+		@Query(value = "INSERT INTO OCEAN_productimg(PRODUCTID,PRODUCTIMGNAME,PRODUCTIMGBLOB,CREATE_DATE,UPDATE_DATE) "
 				+ "VALUES (:PRODUCTID,:PRODUCTIMGNAME, :PRODUCTIMGBLOB,:CREATE_DATE,:UPDATE_DATE);", nativeQuery = true)
 		public void addProductImg(@Param("PRODUCTID") String PRODUCTID,@Param("PRODUCTIMGNAME") String PRODUCTIMGNAME, 
 				@Param("PRODUCTIMGBLOB") byte[] PRODUCTIMGBLOB,
@@ -29,6 +29,6 @@ public interface ProductImgRepository extends JpaRepository<ProductImgModel,Long
 		
 		@Transactional
 		@Modifying
-		@Query(value = "DELETE FROM heroku_895d9448560c022.ocean_productimg WHERE PRODUCTID=:PRODUCTID", nativeQuery = true)
+		@Query(value = "DELETE FROM OCEAN_productimg WHERE PRODUCTID=:PRODUCTID", nativeQuery = true)
 		public int deleteProductImg(@Param("PRODUCTID") int PRODUCTID);
 }

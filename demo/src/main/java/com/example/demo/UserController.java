@@ -30,13 +30,14 @@ public class UserController {
 	@PostMapping("/login")
 	public Map<String,Object> userLogin(@RequestBody UserModel userModel ) {
 		
+		System.out.println("=== 進行登入 ===");
+		
 		Map<String,Object> result = new HashMap<>();
 		
 		String userAccount = userModel.getUserAccount();
 		String userPass = userModel.getUserPass();
-		System.out.println("userAccount= "+userAccount);
-		System.out.println("userPass= "+userPass);
-		String msg;
+		System.out.println("輸入帳號 userAccount= "+userAccount);
+		System.out.println("輸入密碼 userPass= "+userPass);
 		
 		if(userRepository.findByUserAccount(userAccount) != null) {
 			UserModel uModel = userRepository.findByUserAccount(userAccount);
@@ -45,23 +46,34 @@ public class UserController {
 	        String md5Password = MD5util.md5(userPass,salt);
 	        
 	        if(!uModel.getUserPass().equals(md5Password)){
-	        	msg = "密碼錯誤";
 	        	result.put("is_login","密碼錯誤");
 	        }else {
 	        	if(userRepository.findByUserAccountAndUserPass(userAccount, md5Password) != null){
-	        		String token = TokenUtils.sign(uModel);
-	        		result.put("token",token);
-	                result.put("userAccount",userAccount);
-//	                设置返回信息
-	                result.put("is_login",true);
-//	    			msg = "登入成功";
+	        		
+	        		if(!"停權".equals(uModel.getUserStatus())) {
+	        			String token = TokenUtils.sign(uModel);
+		        		
+		        		if("oceanLife@gmail.com".equals(userAccount)) {
+		        			result.put("mangerToken",token);
+			                result.put("mangerAccount",userAccount);
+			                result.put("mangerId",uModel.getUserId());
+		        		}else {
+		        			result.put("userToken",token);
+			                result.put("userAccount",userAccount);
+			                result.put("userId",uModel.getUserId());
+						}
+		        		
+		        		 result.put("is_login",true);
+	        		}else {
+	        			result.put("is_login","該帳號停權中，敬請見諒");
+	        		}
+	        		
+	               
 	    		}else {
-	    			msg = "登入失敗";
 	    			result.put("is_login","登入失敗");
 	    		}
 			}
 		}else {
-			msg = "此帳號不存在";
 			result.put("is_login","此帳號不存在");
 		}
 		
@@ -93,6 +105,11 @@ public class UserController {
 			,@RequestParam(name="phone",required = false)String userPhone
 			,@RequestParam(name="sub",required = false)String userSub
 			,@RequestParam(name="file-to-upload",required = false) MultipartFile userImg) throws IOException {
+		
+		System.out.println("=== 建立帳號 ===");
+		System.out.println("userAccount= "+userAccount);
+		System.out.println("userPass= "+userPass);
+		System.out.println("userName= "+userName);
 		
 		SimpleDateFormat ft =  new SimpleDateFormat ("yyyy-MM-dd");
 		Date date = new Date();
@@ -160,6 +177,12 @@ public class UserController {
 			,@RequestParam(name="status",required = false)String userStatus
 			,@RequestParam(name="file-to-upload",required = false) MultipartFile userImg) throws IOException {
 		
+		
+		System.out.println("=== 更新帳號 ===");
+		System.out.println("userAccount= "+userAccount);
+		System.out.println("userPass= "+userPass);
+		System.out.println("userName= "+userName);
+		
 		SimpleDateFormat ft =  new SimpleDateFormat ("yyyy-MM-dd");
 		Date date = new Date();
 		String thisDate = ft.format(date);
@@ -168,11 +191,14 @@ public class UserController {
 			
 			userModel.setUserAccount(userAccount);
 			
-			// 加密
-	        String salt = UUIDutil.uuid();
-	        userModel.setUserSalt(salt);
-	        String md5Password = MD5util.md5(userPass,salt);
-			userModel.setUserPass(md5Password);
+			if(!"".equals(userPass) && userPass!=null) {
+				System.out.println("更新密碼");
+				// 加密
+		        String salt = UUIDutil.uuid();
+		        userModel.setUserSalt(salt);
+		        String md5Password = MD5util.md5(userPass,salt);
+				userModel.setUserPass(md5Password);
+			}
 			
 			userModel.setUserName(userName);
 			userModel.setUserGender(userGender);

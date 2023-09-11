@@ -20,7 +20,7 @@ public interface ProductRepository extends JpaRepository<ProductModel, Long> {
 	
 	@Transactional
 	@Modifying
-	@Query(value = "DELETE FROM heroku_895d9448560c022.ocean_product WHERE PRODUCTID=:PRODUCTID", nativeQuery = true)
+	@Query(value = "DELETE FROM OCEAN_product WHERE PRODUCTID=:PRODUCTID", nativeQuery = true)
 	public int deleteProduct(@Param("PRODUCTID") int PRODUCTID);
 	
 }

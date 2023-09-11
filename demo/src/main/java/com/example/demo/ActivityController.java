@@ -15,13 +15,20 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.demo.bean.ActivityModel;
 import com.example.demo.dao.ActivityRepository;
 
+//import io.swagger.v3.oas.annotations.Operation;
+//import io.swagger.v3.oas.annotations.tags.Tag;
+
+//@Tag(name = "Activity", description = "Activity management APIs")
 @RestController
 public class ActivityController {
 	
 	@Autowired
 	private ActivityRepository activityRepository;
 
-	
+//	  @Operation(
+//		      summary = "add Activity",
+//		      description = "新增活動",
+//		      tags = { "tutorials", "post" })
 	@RequestMapping("/addActivity")
 	public void addActivity(@RequestParam(name="title",required = false)String title
 			,@RequestParam(name="content",required = false)String content
@@ -57,7 +64,10 @@ public class ActivityController {
 		activityRepository.save(activityModel);
 	}
 	
-	
+//	  @Operation(
+//		      summary = "update Activity",
+//		      description = "更新活動",
+//		      tags = { "tutorials", "post" })
 	@RequestMapping("/updateActivity")
 	public void updateActivity(@RequestParam(name="id",required = false)long activityID ,
 			@RequestParam(name="title",required = false)String title
@@ -94,6 +104,10 @@ public class ActivityController {
 		
 	}
 	
+//	  @Operation(
+//		      summary = "delete Activity",
+//		      description = "刪除活動",
+//		      tags = { "tutorials", "post" })
 	@RequestMapping("/deleteActivity")
 	public void deleteActivity(@RequestParam(name="idList",required = false) Long[] ids ) {
 		
@@ -104,12 +118,20 @@ public class ActivityController {
 		}
 	}
 	
+//	  @Operation(
+//		      summary = "find By Activity ID",
+//		      description = "以ID搜尋活動",
+//		      tags = { "tutorials", "post" })
 	@RequestMapping("/findByActivityID")
 	public ActivityModel findByActivityID(@RequestBody ActivityModel activityModel) {
 		
 		return activityRepository.findByActivityID(Long.valueOf(activityModel.getActivityID()));
 	}
 	
+//	  @Operation(
+//		      summary = "find All Activity",
+//		      description = "搜尋全部活動",
+//		      tags = { "tutorials", "post" })
 	@RequestMapping("/findAllActivity")
 	public List<ActivityModel> findAllActivity(){
 		

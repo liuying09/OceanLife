@@ -28,7 +28,7 @@ public interface ArticleRepository extends JpaRepository<ArticleModel,Long>{
 		// 註記為資料異動
 		@Modifying
 		// 使用標準的SQL Insert語法來寫入資料，冒號+名稱來表示要帶入的參數
-		@Query(value = "INSERT INTO heroku_895d9448560c022.ocean_article(VALUEEN, ARTICLEIMG,ARTICLETITLE,ARTICLECONTENT,ARTICLEREMARK,ARTICLESTATUS,CREATE_DATE,UPDATE_DATE) "
+		@Query(value = "INSERT INTO OCEAN_article(VALUEEN, ARTICLEIMG,ARTICLETITLE,ARTICLECONTENT,ARTICLEREMARK,ARTICLESTATUS,CREATE_DATE,UPDATE_DATE) "
 				+ "VALUES (:VALUEEN, :ARTICLEIMG,:ARTICLETITLE,:ARTICLECONTENT,:ARTICLEREMARK,:ARTICLESTATUS,:CREATE_DATE,:UPDATE_DATE);", nativeQuery = true)
 		// 回傳Int表示新增的資料筆數，透過@Param("")來對應SQL語法裡面的參數，@Param("MARKET_CODE")對應:MARKET_CODE，以此類推
 		public int addArticle(@Param("VALUEEN") String VALUEEN, @Param("ARTICLEIMG") byte[] ARTICLEIMG,
@@ -42,7 +42,7 @@ public interface ArticleRepository extends JpaRepository<ArticleModel,Long>{
 		// 註記為資料異動
 		@Modifying
 		// 使用標準的SQL Insert語法來寫入資料，冒號+名稱來表示要帶入的參數
-		@Query(value = "UPDATE heroku_895d9448560c022.ocean_article SET VALUEEN=:VALUEEN, ARTICLEIMG=:ARTICLEIMG,ARTICLETITLE=:ARTICLETITLE"
+		@Query(value = "UPDATE OCEAN_article SET VALUEEN=:VALUEEN, ARTICLEIMG=:ARTICLEIMG,ARTICLETITLE=:ARTICLETITLE"
 				+ ",ARTICLECONTENT=:ARTICLECONTENT,ARTICLEREMARK=:ARTICLEREMARK,ARTICLESTATUS=:ARTICLESTATUS"
 				+ ",UPDATE_DATE=:UPDATE_DATE WHERE ARTICLEID=:ARTICLEID", nativeQuery = true)
 		// 回傳Int表示新增的資料筆數，透過@Param("")來對應SQL語法裡面的參數，@Param("MARKET_CODE")對應:MARKET_CODE，以此類推
@@ -55,7 +55,7 @@ public interface ArticleRepository extends JpaRepository<ArticleModel,Long>{
 
 		@Transactional
 		@Modifying
-		@Query(value = "DELETE FROM heroku_895d9448560c022.ocean_article WHERE ARTICLEID=:ARTICLEID", nativeQuery = true)
+		@Query(value = "DELETE FROM OCEAN_article WHERE ARTICLEID=:ARTICLEID", nativeQuery = true)
 		public int deleteArticle(@Param("ARTICLEID") int ARTICLEID);
 		
 }
