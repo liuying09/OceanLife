@@ -8,13 +8,20 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,11 +29,19 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.bean.ProductImgModel;
+import com.example.demo.bean.ProductInfo;
 import com.example.demo.bean.ProductModel;
 import com.example.demo.dao.ProductImgRepository;
 import com.example.demo.dao.ProductRepository;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+
 @RestController
+@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+@Tag(name = "商品") //swagger api標題
 public class ProductController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
@@ -39,8 +54,13 @@ public class ProductController {
 	@Autowired
 	DataSource dataSource;
 	
+	
+	
+	
+    @Operation(summary = "取得所有商品", description = "取得所有商品資料")
 	//撈取所有商品資料回傳給前端
-	@RequestMapping("/productPage")
+//	@RequestMapping("/productPage")
+	@GetMapping("/findProducts") //使用get方法
 	public Map<String, Map<String,Object>> productPage() {
 		logger.info("==進入傳回全部商品==");
 		List<ProductModel> list = new ArrayList<ProductModel>();
@@ -83,47 +103,77 @@ public class ProductController {
 		return map;
 	}
 	
-	@RequestMapping("/findByProductID")
-	public Map<String,Object> findByProductID(@RequestBody ProductModel productModel ){
+	
+	/*回傳 ResponseEntity 物件時，可以用它的方法選擇常見的 HTTP 狀態，
+	 * 例如200（OK）、201（Created）、204（No Content）、404（Not Found）等，
+	 * 或者用 status 方法直接自行指定。
+	 * 最後將要回傳的產品資料放在回應主體（body）中。*/
+	
+    
+    @Operation(summary = "以商品id取得商品", description = "以商品id取得商品")
+//	@RequestMapping("/findByProductID")
+	@GetMapping("/findProducts/{id}") //使用get方法
+	public ResponseEntity<ProductInfo> findByProductID(@PathVariable("id") String id ){
 		
-//		String id = "13";
-		
-		Map<String,Object> map = new HashMap<>();
-//		Map<ProductModel,List<ProductImgModel>> map = new HashMap<>();
-//		ProductModel p = productRepository.findByProductId(String.valueOf(productModel.getProductId()));
-		ProductModel p = productRepository.findByProductId(String.valueOf(productModel.getProductId()));
-		System.out.println("name= "+ p.getProductName());
-		
-		map.put("productId",p.getProductId());
-		map.put("productName",p.getProductName());
-		map.put("productPrice",p.getProductPrice());
-		map.put("productPriceSale",p.getProductPriceSale());
-		map.put("productType",p.getProductType());
-		map.put("productNum",p.getProductNum());
-		map.put("productContent",p.getProductContent());
-		map.put("productSpenMaterial",p.getProductSpenMaterial());
-		map.put("productSpenSize",p.getProductSpenSize());
-		map.put("productSpenMF",p.getProductSpenMF());
-		map.put("productRemark",p.getProductRemark());
-		map.put("productStatus", p.getProductStatus());
-		map.put("createDate", p.getCreateDate());
-		map.put("updateDate", p.getUpdateDate());
-		
-		List<Object> listObjects = new ArrayList<Object>();
-		List<ProductImgModel> pList = productImgRepository.findByProductID(String.valueOf(productModel.getProductId()));
-		for(int i = 0; i < pList.size(); i++) {
-			listObjects.add(pList.get(i).getProductImgBlob());
-		}
-		map.put("productImg", listObjects);
-//		map.put(productRepository.findByProductId(String.valueOf(productModel.getProductId())), 
-//				productImgRepository.findByProductID(String.valueOf(productModel.getProductId())));
-		
-		return map;
+		ProductModel productModel = productRepository.findByProductId(id);
+		List<ProductImgModel> productImgs = productImgRepository.findByProductID(id);
+	    if (productModel != null) {
+	        // 將 ProductModel 和 ProductImg 數據封裝成 ProductInfo
+	        ProductInfo productInfo = new ProductInfo();
+	        productInfo.setProductModel(productModel);
+	        productInfo.setProductImgModel(productImgs);
+
+	        return ResponseEntity.ok(productInfo);
+	    } else {
+	        return ResponseEntity.notFound().build();
+	    }
 	
 	}
 	
 	
+//	@RequestMapping("/findByProductID")
+//	@GetMapping("/products/{id}") //使用get方法
+//	public Map<String,Object> findByProductID(@RequestBody ProductModel productModel ){
+//		
+////		String id = "13";
+//		
+//		Map<String,Object> map = new HashMap<>();
+////		Map<ProductModel,List<ProductImgModel>> map = new HashMap<>();
+////		ProductModel p = productRepository.findByProductId(String.valueOf(productModel.getProductId()));
+//		ProductModel p = productRepository.findByProductId(String.valueOf(productModel.getProductId()));
+//		System.out.println("name= "+ p.getProductName());
+//		
+//		map.put("productId",p.getProductId());
+//		map.put("productName",p.getProductName());
+//		map.put("productPrice",p.getProductPrice());
+//		map.put("productPriceSale",p.getProductPriceSale());
+//		map.put("productType",p.getProductType());
+//		map.put("productNum",p.getProductNum());
+//		map.put("productContent",p.getProductContent());
+//		map.put("productSpenMaterial",p.getProductSpenMaterial());
+//		map.put("productSpenSize",p.getProductSpenSize());
+//		map.put("productSpenMF",p.getProductSpenMF());
+//		map.put("productRemark",p.getProductRemark());
+//		map.put("productStatus", p.getProductStatus());
+//		map.put("createDate", p.getCreateDate());
+//		map.put("updateDate", p.getUpdateDate());
+//		
+//		List<Object> listObjects = new ArrayList<Object>();
+//		List<ProductImgModel> pList = productImgRepository.findByProductID(String.valueOf(productModel.getProductId()));
+//		for(int i = 0; i < pList.size(); i++) {
+//			listObjects.add(pList.get(i).getProductImgBlob());
+//		}
+//		map.put("productImg", listObjects);
+////		map.put(productRepository.findByProductId(String.valueOf(productModel.getProductId())), 
+////				productImgRepository.findByProductID(String.valueOf(productModel.getProductId())));
+//		
+//		return map;
+//	
+//	}
+	
+	
 	//新增商品
+    @Operation(summary = "新增商品", description = "新增商品")
 	 @PostMapping("/addProduct") //設置url路徑對應到此方法上，並限制只能使用Post方法,
 	 public void create(@RequestParam(name="name",required = false)String name ,
 				@RequestParam(name="price",required = false)String price
@@ -180,7 +230,9 @@ public class ProductController {
 	 }
 	 
 	 
-	 @PostMapping("/updateProduct") //設置url路徑對應到此方法上，並限制只能使用Post方法,
+    @Operation(summary = "更新商品", description = "更新商品")
+//	 @PostMapping("/updateProduct") //設置url路徑對應到此方法上，並限制只能使用Post方法,
+	 @PutMapping("/updateProduct/{id}")
 	 public void updateProduct(@RequestParam(name="productId",required = false)int id ,
 			 @RequestParam(name="name",required = false)String name ,
 				@RequestParam(name="price",required = false)String price
@@ -193,7 +245,7 @@ public class ProductController {
 				,@RequestParam(name="mf",required = false)String mf
 				,@RequestParam(name="remark",required = false)String remark
 				,@RequestParam(name="status",required = false)String status
-				,@RequestParam(name="file-to-upload",required = false) MultipartFile[] fileField) throws IOException{ 
+				,@RequestParam(name="file-to-upload",required = false) MultipartFile[] fileField) throws IOException{
 		 
 		 	logger.info("==進入更新商品==");
 		 
@@ -239,7 +291,9 @@ public class ProductController {
 	 }
 
 	 
-	 @RequestMapping("/deleteProduct")
+    @Operation(summary = "刪除商品", description = "刪除商品")
+//	 @RequestMapping("/deleteProduct")
+	 @DeleteMapping("/deleteProduct")
 		public void deleteProduct(@RequestParam(name="idList",required = false) Integer[] ids ) {
 			
 			for(int i = 0; i < ids.length; i++) {
